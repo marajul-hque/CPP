@@ -1,8 +1,10 @@
 #include <iostream>
+using namespace std;
 int main()
 {
-    std ::cout << "i am good!" << '\n';
-    std ::cout << "certainly god is with you! " << std ::endl;
-
-    return 0;
+	int a=5;
+	int b=3;
+	int sum= a+b;
+	cout << sum;
+   
 }
