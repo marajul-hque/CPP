@@ -9,18 +9,25 @@ int main()
     double b;
 
     cout << "please enter first number: ";
-    cin >> a;
+    while (!(cin >> a))
+    {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid input please enter a double : ";
+    }
+
     while (true)
     {
         cout << "enter the operation you want :";
         cin >> s;
-        if (s != '+' || s != '-' || s != '*' || s != '/')
-        {
-            cout << "please enter correct operator"<<endl;
-        }
+
         if (s == '+' || s == '-' || s == '*' || s == '/')
         {
             break;
+        }
+        else
+        {
+            cout << "please enter correct operator" << endl;
         }
     }
 
