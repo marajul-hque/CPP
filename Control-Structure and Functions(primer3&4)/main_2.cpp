@@ -11,11 +11,12 @@ int main()
     cout << "ASCII value of A: " << (int)d << endl; // thus you can generate ascci value of a character
 
     // here another tricks to convert int into possible char (int value to char).
-    int x=100;
-    cout<<"char value of : "<<x <<" is : "<<char(x)<<endl; 
+    int x = 100;
+    cout << "char value of : " << x << " is : " << char(x) << endl;
+    cout << "hello\aworld" << endl;
 
-
-    cout<<"hello\aworld"<<endl;
+    const int MONTH = 12;
+    cout << MONTH;
 
     return 0;
 }
