@@ -1,18 +1,21 @@
 #include <iostream>
+#include <typeinfo>
 using namespace std;
+// auto sum(auto x, auto y)
+// {
+//     return x / y;
+// }
 
 int main()
 {
-    int i = 9;
-    int j = 5;
-    cout << (float)i / j << endl; // here i and j are int , if i dont force them typecast into float thrn it will not show decimal part
+    auto a = 0;
+    auto b = 0.0;
 
-    char c = 'C';
-    cout << (int)c << endl;
-    cout << "yes, the code of c is : " << static_cast<int>(c) << endl;
-
-    int x{3.9832};
-    cout << x;
+    cout << typeid(a).name() << endl;
+    cout << typeid(b).name() << endl;
+    auto m = -19 % 5;
+    cout << m;
+    // cout << "sum is: " << sum(4.5, 5);
 
     return 0;
 }
