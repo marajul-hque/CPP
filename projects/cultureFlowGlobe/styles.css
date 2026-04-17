@@ -1,0 +1,196 @@
+:root {
+  --bg: #05070e;
+  --panel: #0b1120;
+  --panel-border: #1f2a44;
+  --text: #ebf2ff;
+  --muted: #9cb2d7;
+  --accent: #53a3ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 30% 20%, #12192f 0%, var(--bg) 45%, #020308 100%);
+  color: var(--text);
+  font-family: Inter, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  min-height: 100vh;
+}
+
+.canvas-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+#globeCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+
+#globeCanvas.dragging {
+  cursor: grabbing;
+}
+
+.panel {
+  background: linear-gradient(180deg, #0f172a 0%, #070d1a 100%);
+  border-left: 1px solid var(--panel-border);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.subtitle,
+.city-info p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.control-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+button,
+select,
+fieldset,
+.switch {
+  border-radius: 8px;
+}
+
+button,
+select {
+  width: 100%;
+  border: 1px solid #2c3c61;
+  background: #111d35;
+  color: var(--text);
+  padding: 0.55rem 0.65rem;
+}
+
+button:hover,
+select:hover {
+  border-color: #3c5f96;
+}
+
+fieldset {
+  margin: 0;
+  border: 1px solid #2b3a5f;
+  padding: 0.6rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+legend {
+  color: var(--muted);
+  padding: 0 0.35rem;
+}
+
+label {
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #2b3a5f;
+  padding: 0.6rem;
+}
+
+.legend,
+.city-info {
+  border: 1px solid #2b3a5f;
+  border-radius: 8px;
+  padding: 0.7rem;
+}
+
+.legend ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #cad9f4;
+  font-size: 0.88rem;
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.music { background: #66b8ff; }
+.film { background: #c37bff; }
+.food { background: #ff9f59; }
+.fashion { background: #4de0c8; }
+
+.hint,
+.tooltip {
+  position: absolute;
+  background: rgba(6, 11, 24, 0.88);
+  border: 1px solid #324268;
+  color: #dfeaff;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  padding: 0.45rem 0.55rem;
+  pointer-events: none;
+}
+
+.hint {
+  left: 1rem;
+  bottom: 1rem;
+}
+
+.tooltip {
+  left: 0;
+  top: 0;
+  transform: translate(12px, 12px);
+  max-width: 220px;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(65vh, 1fr) auto;
+  }
+
+  .panel {
+    border-left: 0;
+    border-top: 1px solid var(--panel-border);
+  }
+}
