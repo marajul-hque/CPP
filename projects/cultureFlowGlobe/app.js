@@ -52,6 +52,7 @@ const categoryColors = {
 
 const NORMAL_FPS = 60;
 const REDUCED_MOTION_FPS = 30;
+const UI_FONT_STACK = "Inter, Segoe UI, Roboto, Arial, sans-serif";
 
 const cityMap = new Map(cities.map((city) => [city.id, city]));
 flows.forEach((flow) => {
@@ -107,6 +108,7 @@ function init() {
   populateCityFilter();
   updateCityPanel();
   verifyContrast();
+  setupThemeWatchers();
   bindEvents();
   resizeCanvas();
 }
@@ -174,9 +176,13 @@ function bindEvents() {
   });
 
   canvas.addEventListener("wheel", (event) => {
-    event.preventDefault();
     const zoomStep = state.reducedMotion ? 0.045 : 0.07;
-    state.zoom = clamp(state.zoom - Math.sign(event.deltaY) * zoomStep, 0.72, 1.72);
+    const nextZoom = clamp(state.zoom - Math.sign(event.deltaY) * zoomStep, 0.72, 1.72);
+    if (nextZoom === state.zoom) {
+      return;
+    }
+    event.preventDefault();
+    state.zoom = nextZoom;
   }, { passive: false });
 
   pauseBtn.addEventListener("click", () => {
@@ -413,7 +419,7 @@ function drawLabels() {
   state.cityScreenPoints.forEach((city) => {
     if (city.id !== state.selectedCity && city.id !== state.hoveredCity?.id && !showAmbientLabels) return;
 
-    ctx.font = "12px Inter, Segoe UI, Arial";
+    ctx.font = `12px ${UI_FONT_STACK}`;
     ctx.fillStyle = city.id === state.selectedCity ? "#f2f7ff" : "#d8e8ff";
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
@@ -561,8 +567,9 @@ function clamp(value, min, max) {
 }
 
 function verifyContrast() {
-  const bg = "#0b1120";
-  const fg = "#ebf2ff";
+  const styles = getComputedStyle(document.body);
+  const bg = styles.getPropertyValue("--panel").trim() || "#0b1120";
+  const fg = styles.getPropertyValue("--text").trim() || "#ebf2ff";
   const ratio = contrastRatio(bg, fg);
   if (ratio < 4.5) {
     console.warn(`Contrast ratio too low: ${ratio.toFixed(2)}:1`);
@@ -573,8 +580,14 @@ function verifyContrast() {
 }
 
 function contrastRatio(colorA, colorB) {
-  const lumA = luminance(colorA);
-  const lumB = luminance(colorB);
+  let lumA = 0;
+  let lumB = 0;
+  try {
+    lumA = luminance(colorA);
+    lumB = luminance(colorB);
+  } catch (error) {
+    console.warn(`Color contrast check failed: ${error.message}`);
+  }
   const [light, dark] = lumA > lumB ? [lumA, lumB] : [lumB, lumA];
   return (light + 0.05) / (dark + 0.05);
 }
@@ -582,14 +595,27 @@ function contrastRatio(colorA, colorB) {
 function luminance(hex) {
   const normalized = hex.trim().replace("#", "");
   if (!/^[0-9a-fA-F]{6}$/.test(normalized)) {
-    return 0;
+    throw new Error(`Unsupported color format: ${hex}`);
   }
   const rawChannels = normalized.match(/.{2}/g);
   if (!rawChannels) {
-    return 0;
+    throw new Error(`Unable to parse color channels: ${hex}`);
   }
   const channels = rawChannels
     .map((c) => parseInt(c, 16) / 255)
     .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
   return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+}
+
+function setupThemeWatchers() {
+  const observer = new MutationObserver(() => verifyContrast());
+  observer.observe(document.body, {
+    attributes: true,
+    attributeFilter: ["class", "style"],
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["style"],
+  });
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", verifyContrast);
 }
