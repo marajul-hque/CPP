@@ -471,7 +471,7 @@ function updateCityPanel() {
     <p>Incoming flows: <strong>${incoming}</strong></p>
     <p>Outgoing flows: <strong>${outgoing}</strong></p>
     <p>Active categories: <strong>${new Set(connected.map((f) => f.category)).size}</strong></p>
-    <p>Strongest route: <strong>${strongest ? `${cityMap.get(strongest.from).name} → ${cityMap.get(strongest.to).name}` : "None"}</strong></p>
+    <p>Highest intensity route: <strong>${strongest ? `${cityMap.get(strongest.from).name} → ${cityMap.get(strongest.to).name}` : "None"}</strong></p>
   `;
 }
 
@@ -566,6 +566,9 @@ function verifyContrast() {
   const ratio = contrastRatio(bg, fg);
   if (ratio < 4.5) {
     console.warn(`Contrast ratio too low: ${ratio.toFixed(2)}:1`);
+    document.body.classList.add("high-contrast");
+  } else {
+    document.body.classList.remove("high-contrast");
   }
 }
 

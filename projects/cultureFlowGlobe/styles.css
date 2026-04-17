@@ -7,6 +7,14 @@
   --accent: #53a3ff;
 }
 
+body.high-contrast {
+  --bg: #010207;
+  --panel: #060b16;
+  --panel-border: #3d5f9d;
+  --text: #ffffff;
+  --muted: #d7e5ff;
+}
+
 * {
   box-sizing: border-box;
 }
