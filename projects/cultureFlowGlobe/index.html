@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Culture Flow Globe</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="canvas-wrap">
+      <canvas id="globeCanvas" aria-label="Interactive globe showing culture flow routes"></canvas>
+      <div class="hint" id="hint">
+        Drag to rotate · Scroll to zoom · Click a city to pin details
+      </div>
+      <div class="tooltip hidden" id="tooltip" role="status" aria-live="polite"></div>
+    </section>
+
+    <aside class="panel" aria-label="Visualization controls">
+      <h1>Culture Flow Globe</h1>
+      <p class="subtitle">A dark-themed map of how culture moves across cities.</p>
+
+      <div class="control-row">
+        <button id="pauseBtn" type="button">Pause</button>
+        <button id="resetBtn" type="button">Reset View</button>
+      </div>
+
+      <label for="cityFilter">Focus city</label>
+      <select id="cityFilter">
+        <option value="all">All cities</option>
+      </select>
+
+      <fieldset>
+        <legend>Flow categories</legend>
+        <label><input type="checkbox" class="category-toggle" value="music" checked /> Music</label>
+        <label><input type="checkbox" class="category-toggle" value="film" checked /> Film</label>
+        <label><input type="checkbox" class="category-toggle" value="food" checked /> Food</label>
+        <label><input type="checkbox" class="category-toggle" value="fashion" checked /> Fashion</label>
+      </fieldset>
+
+      <label class="switch">
+        <input type="checkbox" id="reducedMotionToggle" />
+        <span>Reduced motion</span>
+      </label>
+
+      <section class="legend">
+        <h2>Legend</h2>
+        <ul>
+          <li><span class="swatch music"></span> Music exchange</li>
+          <li><span class="swatch film"></span> Film exchange</li>
+          <li><span class="swatch food"></span> Food exchange</li>
+          <li><span class="swatch fashion"></span> Fashion exchange</li>
+        </ul>
+      </section>
+
+      <section class="city-info" id="cityInfo">
+        <h2>City details</h2>
+        <p>Select a city to view flow summary.</p>
+      </section>
+    </aside>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
