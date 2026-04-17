@@ -50,6 +50,9 @@ const categoryColors = {
   fashion: "#4de0c8",
 };
 
+const NORMAL_FPS = 60;
+const REDUCED_MOTION_FPS = 30;
+
 const cityMap = new Map(cities.map((city) => [city.id, city]));
 flows.forEach((flow) => {
   if (!cityMap.has(flow.from) || !cityMap.has(flow.to)) {
@@ -225,7 +228,7 @@ function resizeCanvas() {
 
 function loop(timestamp) {
   requestAnimationFrame(loop);
-  const frameBudget = state.reducedMotion ? 1000 / 30 : 1000 / 60;
+  const frameBudget = state.reducedMotion ? 1000 / REDUCED_MOTION_FPS : 1000 / NORMAL_FPS;
   if (timestamp - state.lastRenderAt < frameBudget) {
     return;
   }
@@ -457,7 +460,10 @@ function updateCityPanel() {
   );
   const outgoing = connected.filter((flow) => flow.from === city.id).length;
   const incoming = connected.filter((flow) => flow.to === city.id).length;
-  const strongest = connected.reduce((max, flow) => (flow.intensity > (max?.intensity || -1) ? flow : max), null);
+  const strongest = connected.reduce((max, flow) => {
+    if (!max) return flow;
+    return flow.intensity > max.intensity ? flow : max;
+  }, null);
 
   cityInfo.innerHTML = `
     <h2>${city.name}</h2>
@@ -571,9 +577,15 @@ function contrastRatio(colorA, colorB) {
 }
 
 function luminance(hex) {
-  const channels = hex
-    .replace("#", "")
-    .match(/.{2}/g)
+  const normalized = hex.trim().replace("#", "");
+  if (!/^[0-9a-fA-F]{6}$/.test(normalized)) {
+    return 0;
+  }
+  const rawChannels = normalized.match(/.{2}/g);
+  if (!rawChannels) {
+    return 0;
+  }
+  const channels = rawChannels
     .map((c) => parseInt(c, 16) / 255)
     .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
   return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
