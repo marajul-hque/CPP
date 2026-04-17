@@ -470,6 +470,10 @@ function updateCityPanel() {
     if (!max) return flow;
     return flow.intensity > max.intensity ? flow : max;
   }, null);
+  const strongestFrom = strongest ? cityMap.get(strongest.from) : null;
+  const strongestTo = strongest ? cityMap.get(strongest.to) : null;
+  const strongestLabel =
+    strongestFrom && strongestTo ? `${strongestFrom.name} → ${strongestTo.name}` : "None";
 
   cityInfo.innerHTML = `
     <h2>${city.name}</h2>
@@ -477,7 +481,7 @@ function updateCityPanel() {
     <p>Incoming flows: <strong>${incoming}</strong></p>
     <p>Outgoing flows: <strong>${outgoing}</strong></p>
     <p>Active categories: <strong>${new Set(connected.map((f) => f.category)).size}</strong></p>
-    <p>Highest intensity route: <strong>${strongest ? `${cityMap.get(strongest.from).name} → ${cityMap.get(strongest.to).name}` : "None"}</strong></p>
+    <p>Highest intensity route: <strong>${strongestLabel}</strong></p>
   `;
 }
 
